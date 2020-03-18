@@ -15,11 +15,10 @@ typedef struct      _routes {
     struct _routes  *paths[10];
 }                   routes;
 
-typedef struct      _head {
+typedef struct      _root {
     char            *startName;
-    char            *endName;
-    struct links    *next;
-}                   head;
+    struct routes   *next;
+}                   root;
 
 char    *getPosition(char **arr, char *position)
 {
@@ -73,14 +72,13 @@ void   getLinks(char **arr, links **head)
 {
     while (*arr)
     {
-        ft_putendl(*arr);
         if (ft_strchr(*arr, '-'))
             storeLink(*arr, head);
         arr++;
     }
 }
 
-int     main(int argc, char **argv)
+int     main(void)
 {
     links   *head;
     int     antsNumber;
@@ -92,21 +90,19 @@ int     main(int argc, char **argv)
     head = NULL;
     char **name;
     char *str = "3'##start'0 1 0'##end'1 5 0'2 9 0'3 13 0'0-2'2-3'3-1";
-    char *str2 = "3'2 5 0'##start'0 1 2'##end'1 9 2'3 5 4'0-2'0-3'2-1'3-1'2-3";
+    // char *str2 = "3'2 5 0'##start'0 1 2'##end'1 9 2'3 5 4'0-2'0-3'2-1'3-1'2-3";
 
-    name = ft_strsplit(str2, '\'');
-    antsNumber = getNumberOfAnts(*name);
+    name = ft_strsplit(str, '\'');
+    antsNumber = getNumberOfAnts((*name)++);
     start = getPosition(name, START);
     startName = ft_strsub(start, 0, ft_strchr(start, ' ') - start);
     end = getPosition(name, END);
     endName = ft_strsub(end, 0, ft_strchr(end, ' ') - end);
     getLinks(name, &head);
-    printf("Number of ants: %d\nStarting position: %s\nEnd position: %s\nStart pos name: %s\nEnd pos name: %s\n", antsNumber, start, end, startName, endName);
-    ft_putendl("Links");
-    while (head)
-    {
+    while (head) {
         ft_putendl(head->data);
         head = head->next;
     }
+    
     return (0);
 }

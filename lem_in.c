@@ -10,9 +10,9 @@ typedef struct      _links {
     struct _links   *next;
 }                   links;
 
-typedef struct      _routes {
-    char            *names;
-    struct _routes  *paths[10];
+typedef struct      _trie_node {
+    char                *names;
+    struct _trie_node   *paths[10];
 }                   routes;
 
 typedef struct      _root {
@@ -29,16 +29,38 @@ void    print_array(char **arr)
     }
 }
 
+void    error_handler(char *position, char  *error_msg)
+{
+    char    *str;
+
+    str = ft_strjoin(ft_strdup("Error: "), position);
+    str = ft_strjoin(str, error_msg);
+    ft_putendl(str);
+    exit(1);
+}
+
 char    *getPosition(char **arr, char *position)
 {
-    char     *pos_found;
+    char    *pos_found;
+    char    *str;
 
+    pos_found = NULL;
+    str = NULL;
     while (*arr)
     {
         if (!ft_strcmp(*arr, position))
+        {
             pos_found = ft_strdup(*(++arr));
+            str = ft_strchr(pos_found, ' ');
+        }
         arr++;
     }
+    if (!pos_found)
+        error_handler(position, " NOT FOUND!");
+    else if (!str)
+        error_handler(position, " NOT FOUND!");
+    else if (!ft_strchr(++str, ' '))
+        error_handler(position, " NOT FOUND!");
     return pos_found;
 }
 
@@ -96,6 +118,22 @@ void    getRooms(char **arr, char *start, char *end, links **rooms)
             storeLink(*arr, rooms);
         arr++;
     }
+    if (!(*rooms) && (!start || !end))
+        error_handler("rooms", " NOT FOUND");
+}
+
+char    *read_input(void)
+{
+    char    *str;
+    char    *line;
+
+    str = "";
+    while (get_next_line(0, &line) > 0)
+    {
+        str = ft_strjoin(str, line);
+        str = ft_strjoin(str, "'");
+    }
+    return (str);
 }
 
 int     main(void)
@@ -107,14 +145,13 @@ int     main(void)
     char    *startName;
     char    *end;
     char    *endName;
+    char    **name;
+    char    *str;
 
     head = NULL;
     room = NULL;
-    char **name;
-    // char *str = "3'##start'0 1 0'##end'1 5 0'2 9 0'3 13 0'0-2'2-3'3-1";
-    char *str2 = "0'2 5 0'##start'0 1 2'##end'1 9 2'3 5 4'0-2'0-3'2-1'3-1'2-3";
-
-    name = ft_strsplit(str2, '\'');
+    str = read_input();
+    name = ft_strsplit(str, '\'');
     antsNumber = getNumberOfAnts((*name));
     start = getPosition(name, START);
     startName = ft_strsub(start, 0, ft_strchr(start, ' ') - start);
@@ -130,6 +167,11 @@ int     main(void)
     ft_putendl(start);
     ft_putendl("End postion");
     ft_putendl(end);
+    ft_putendl("links");
+    ft_putendl("Start name");
+    ft_putendl(startName);
+    ft_putendl("End name");
+    ft_putendl(endName);
     ft_putendl("links");
     while (head) {
         ft_putendl(head->data);

@@ -24,7 +24,6 @@ int		get_line(int fd, char **line, char **store)
 	else
 		*line = ft_strsub(store[fd], 0, (ft_strchr(store[fd], '\n') - \
 		store[fd]));
-	ft_strdel(&temp);
 	return (1);
 }
 

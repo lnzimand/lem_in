@@ -1,6 +1,8 @@
-FLAGS = -Wall -Werror -Wextra -c
+FLAGS = -Wall -Werror -Wextra
 
 NAME = lem_in.a
+
+EXE = lem_in
 
 OBJS = ./libft/ft_strchr.o ./libft/ft_strrchr.o ./libft/ft_strstr.o ./libft/ft_strnstr.o \
 	   ./libft/ft_strcmp.o ./libft/ft_strncmp.o ./libft/ft_atoi.o ./libft/ft_isalpha.o \
@@ -31,13 +33,14 @@ $(NAME) :
 	$(gnlmake)
 	ar rv $(NAME) $(OBJS) $(INC)
 	ranlib $(NAME)
+	cc $(FLAGS) lem_in.c -o $(EXE) $(NAME)
 
 clean:
 	$(MAKE) -C libft/ clean
 	$(MAKE) -C gnl/ clean
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(EXE)
 
 re: fclean all
 

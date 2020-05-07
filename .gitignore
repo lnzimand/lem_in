@@ -1,2 +1,6 @@
 *.out
 *.a
+lem_in
+lem_inII.c
+*.txt
+example.c

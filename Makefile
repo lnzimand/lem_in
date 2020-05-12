@@ -19,18 +19,22 @@ OBJS = ./libft/ft_strchr.o ./libft/ft_strrchr.o ./libft/ft_strstr.o ./libft/ft_s
 	   ./libft/ft_memmove.o ./libft/ft_memset.o ./libft/ft_strcat.o ./libft/ft_strcpy.o \
 	   ./libft/ft_strdup.o ./libft/ft_strlcat.o ./libft/ft_strlen.o ./libft/ft_atol.o \
 	   ./libft/ft_strncat.o ./libft/ft_strncpy.o ./libft/ft_lstadd.o ./libft/ft_isspace.o\
-	   ./gnl/get_next_line.o
+	   ./gnl/get_next_line.o ./src/list_init.o ./src/list_destroy.o ./src/list_ins_next.o \
+	   ./src/list_rem_next.o
 
 libftmake = $(MAKE) -C libft
 
 gnlmake = $(MAKE) -C gnl
 
-INC = 
+lem_inmake = $(MAKE) -C src
+
+INC = lem_in.h
 
 all: $(NAME)
 $(NAME) :
 	$(libftmake)
 	$(gnlmake)
+	$(lem_inmake)
 	ar rv $(NAME) $(OBJS) $(INC)
 	ranlib $(NAME)
 	cc $(FLAGS) lem_in.c -o $(EXE) $(NAME)
@@ -38,6 +42,7 @@ $(NAME) :
 clean:
 	$(MAKE) -C libft/ clean
 	$(MAKE) -C gnl/ clean
+	$(MAKE) -C src/ clean
 
 fclean: clean
 	rm -f $(NAME) $(EXE)

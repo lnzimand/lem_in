@@ -1,6 +1,5 @@
 #include "libft/libft.h"
 #include "gnl/get_next_line.h"
-#include <stdio.h>
 
 #define START "##start"
 #define END "##end"
@@ -10,10 +9,10 @@ typedef struct      _links {
     struct _links   *next;
 }                   links;
 
-typedef struct      _trie_node {
-    char                *names;
+typedef struct          _trie_node {
+    char                *link_name;
     struct _trie_node   *paths[10];
-}                   routes;
+}                       routes;
 
 typedef struct      _root {
     char            *startName;
@@ -39,6 +38,57 @@ void    error_handler(char *position, char  *error_msg)
     exit(1);
 }
 
+void    check_coordinates(char *position, char *str)
+{
+    if (ft_strchr(++str, ' '))
+    {
+        str = ft_strchr(++str, ' ');
+        if (!ft_isdigit(*++str))
+            error_handler(position, " INCORRECT INPUT!");
+    }
+    else
+        error_handler(position, " INCORRECT INPUT!");
+    
+}
+
+int     arr_length(char **arr)
+{
+    char    **temp;
+
+    temp = arr;
+    while(*temp)
+        temp++;
+    return (temp - arr);
+}
+
+void    all_digits(char **arr)
+{
+    if (arr_length(arr) != 2)
+        error_handler("room coordinate: ", "INCORRECT INPUT!");
+    while (*arr)
+    {
+        while (**arr)
+        {
+            if (!ft_isdigit(**arr))
+                error_handler("room coordinate: ", "INCORRECT INPUT!");
+            (*arr)++;
+        }
+        arr++;
+    }
+    return ;
+}
+
+void    errors(char *room)
+{
+    char    *temp;
+    char    **temp2;
+
+    temp = ft_strchr((const char*)room, ' ');
+    temp2 = ft_strsplit((const char*)temp, ' ');
+    all_digits(temp2);
+    return ;
+}
+
 char    *getPosition(char **arr, char *position)
 {
     char    *pos_found;
@@ -59,13 +109,24 @@ char    *getPosition(char **arr, char *position)
         error_handler(position, " NOT FOUND!");
     else if (!str)
         error_handler(position, " NOT FOUND!");
-    else if (!ft_strchr(++str, ' '))
-        error_handler(position, " NOT FOUND!");
+    else
+        check_coordinates(position, str);
     return pos_found;
 }
 
 int     getNumberOfAnts(char *str)
 {
+    char    *temp;
+
+    temp = ft_strtrim(str);
+    if (!temp)
+        error_handler("ants number: ", "INCORRECT INPUT!");
+    while (*temp)
+    {
+        if (!ft_isdigit(*temp))
+            error_handler("ants number: ", "INCORRECT INPUT!");
+        temp++;
+    }
     return ft_atoi(str);
 }
 
@@ -111,14 +172,20 @@ void   getLinks(char **arr, links **head)
 
 void    getRooms(char **arr, char *start, char *end, links **rooms)
 {
+    errors(start);
+    errors(end);
     while (*arr)
     {
         if (ft_strcmp(*arr, start) && ft_strcmp(*arr, end) && \
         !ft_strchr(*arr, '#') && !ft_strchr(*arr, '-'))
+        {
+            errors(*arr);
+            check_coordinates("room", *arr);
             storeLink(*arr, rooms);
+        }
         arr++;
     }
-    if (!(*rooms) && (!start || !end))
+    if (!(*rooms))
         error_handler("rooms", " NOT FOUND");
 }
 
@@ -159,7 +226,7 @@ int     main(void)
     endName = ft_strsub(end, 0, ft_strchr(end, ' ') - end);
     getLinks(name, &head);
     getRooms(++name, start, end, &room);
-    // getRoutes(start, antsNumber);
+    // getPath(start, antsNumber);
     ft_putendl("Ants Number");
     ft_putnbr(antsNumber);
     ft_putchar('\n');

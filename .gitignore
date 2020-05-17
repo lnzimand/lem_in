@@ -4,3 +4,5 @@ lem_in
 lem_inII.c
 *.txt
 example.c
+*.o
+lem_inIII.c

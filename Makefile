@@ -20,7 +20,10 @@ OBJS = ./libft/ft_strchr.o ./libft/ft_strrchr.o ./libft/ft_strstr.o ./libft/ft_s
 	   ./libft/ft_strdup.o ./libft/ft_strlcat.o ./libft/ft_strlen.o ./libft/ft_atol.o \
 	   ./libft/ft_strncat.o ./libft/ft_strncpy.o ./libft/ft_lstadd.o ./libft/ft_isspace.o\
 	   ./gnl/get_next_line.o ./src/list_init.o ./src/list_destroy.o ./src/list_ins_next.o \
-	   ./src/list_rem_next.o
+	   ./src/list_rem_next.o ./src/insert.o ./src/is_member.o ./src/remove.o ./src/graph_adjlist.o \
+	   ./src/graph_destroy.o ./src/graph_init.o ./src/graph_ins_edge.o ./src/graph_ins_vertex.o \
+	   ./src/graph_is_adjacent.o ./src/graph_rem_edge.o ./src/graph_rem_vertex.o ./src/set_init.o \
+	   ./src/queue_enqueue.o ./src/queue_dequeue.o ./src/breadth_first_search.o ./libft/ft_strpos.o
 
 libftmake = $(MAKE) -C libft
 

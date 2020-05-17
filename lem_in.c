@@ -1,5 +1,6 @@
 #include "libft/libft.h"
 #include "gnl/get_next_line.h"
+#include "lem_in.h"
 
 #define START "##start"
 #define END "##end"
@@ -9,10 +10,9 @@ typedef struct      _links {
     struct _links   *next;
 }                   links;
 
-typedef struct          _trie_node {
-    char                *link_name;
-    struct _trie_node   *paths[10];
-}                       routes;
+// typedef struct      _trie_node {
+//     struct _trie_node   *paths[10];
+// }                   routes;
 
 typedef struct      _root {
     char            *startName;
@@ -120,11 +120,11 @@ int     getNumberOfAnts(char *str)
 
     temp = ft_strtrim(str);
     if (!temp)
-        error_handler("ants number: ", "INCORRECT INPUT!");
+        error_handler("ants number ", "INCORRECT INPUT!");
     while (*temp)
     {
         if (!ft_isdigit(*temp))
-            error_handler("ants number: ", "INCORRECT INPUT!");
+            error_handler("ants number ", "INCORRECT INPUT!");
         temp++;
     }
     return ft_atoi(str);
@@ -172,6 +172,8 @@ void   getLinks(char **arr, links **head)
 
 void    getRooms(char **arr, char *start, char *end, links **rooms)
 {
+    char    *temp;
+
     errors(start);
     errors(end);
     while (*arr)
@@ -181,7 +183,8 @@ void    getRooms(char **arr, char *start, char *end, links **rooms)
         {
             errors(*arr);
             check_coordinates("room", *arr);
-            storeLink(*arr, rooms);
+            temp = ft_strsub(*arr, 0, ft_strchr(*arr, ' ') - *arr);
+            storeLink(temp, rooms);
         }
         arr++;
     }
@@ -203,52 +206,110 @@ char    *read_input(void)
     return (str);
 }
 
+int     match(const void *data1, const void *data2)
+{
+    if (!ft_strcmp((char*)data1, (char*)data2))
+        return 1;
+    return 0;
+}
+
+Graph   *graph_alloc(void)
+{
+    Graph   *new_graph;
+
+    if (!(new_graph = (Graph*)malloc(sizeof(Graph))))
+        error_handler("Allocating memory for graph:", "Insufficient memory");
+    return new_graph;
+}
+
+void    print_graph(Graph *graph)
+{
+    list_elmt   *element;
+    list_elmt   *adj_element;
+    char        *holder;
+
+    element = list_head(&graph->adjlists);
+    while (element != NULL)
+    {
+        holder = ((adj_list*)list_data(element))->vertex;
+        ft_putendl("Room");
+        ft_putendl(holder);
+        adj_element = (((adj_list*)list_data(element))->adjacent).head;
+        ft_putendl("Connected to");
+        while (adj_element != NULL)
+        {
+            holder = adj_element->data;
+            ft_putendl(holder);
+            adj_element = list_next(adj_element);
+        }
+        
+        // adj_element = ((adj_list*)list_data(adj_element)->adjacent)
+        element = list_next(element);
+    }
+}
+
 int     main(void)
 {
     links   *head;
-    links   *room;
+    links   *holder;
+    links   *vertices;
+    links   *v_holder;
     int     antsNumber;
     char    *start;
-    char    *startName;
     char    *end;
+    char    *startName;
     char    *endName;
     char    **name;
     char    *str;
+    char    *link1;
+    char    *link2;
+    Graph   *graph;
 
+    graph = graph_alloc();
+    graph_init(graph, &match, &graph_destroy);
     head = NULL;
-    room = NULL;
+    vertices = NULL;
     str = read_input();
     name = ft_strsplit(str, '\'');
     antsNumber = getNumberOfAnts((*name));
-    start = getPosition(name, START);
-    startName = ft_strsub(start, 0, ft_strchr(start, ' ') - start);
-    end = getPosition(name, END);
-    endName = ft_strsub(end, 0, ft_strchr(end, ' ') - end);
+    startName = getPosition(name, START);
+    start = ft_strsub(startName, 0, ft_strchr(startName, ' ') - startName);
+    storeLink(start, &vertices);
+    endName = getPosition(name, END);
+    end = ft_strsub(endName, 0, ft_strchr(endName, ' ') - endName);
+    storeLink(end, &vertices);
     getLinks(name, &head);
-    getRooms(++name, start, end, &room);
-    // getPath(start, antsNumber);
-    ft_putendl("Ants Number");
-    ft_putnbr(antsNumber);
-    ft_putchar('\n');
-    ft_putendl("Start postion");
-    ft_putendl(start);
-    ft_putendl("End postion");
-    ft_putendl(end);
+    getRooms(++name, startName, endName, &vertices);
     ft_putendl("links");
-    ft_putendl("Start name");
-    ft_putendl(startName);
-    ft_putendl("End name");
-    ft_putendl(endName);
-    ft_putendl("links");
-    while (head) {
-        ft_putendl(head->data);
-        head = head->next;
+    holder = head;
+    while (holder) {
+        link1 = ft_strsub(holder->data, 0, ft_strchr(holder->data, '-') - holder->data);
+        link2 = ft_strsub(holder->data, (ft_strchr(holder->data, '-') - holder->data) + 1, ft_strlen(holder->data));
+        ft_putendl(holder->data);
+        holder = list_next(holder);
     }
-    ft_putendl("rooms");
-    while (room)
+    v_holder = vertices;
+    while (v_holder)
     {
-        ft_putendl(room->data);
-        room = room->next;
+        graph_ins_vertex(graph, v_holder->data);
+        v_holder = list_next(v_holder);
     }
-    return (0);
+    v_holder = vertices;
+    while (v_holder)
+    {
+        holder = head;
+        while (holder)
+        {
+            link1 = ft_strsub(holder->data, 0, ft_strchr(holder->data, '-') - holder->data);
+            link2 = ft_strsub(holder->data, (ft_strchr(holder->data, '-') - holder->data) + 1, ft_strlen(holder->data));
+            if (match((void*)link1, (void*)v_holder->data))
+                graph_ins_edge(graph, (void*)v_holder->data, (void*)link2);
+            if (match((void*)link2, (void*)v_holder->data))
+                graph_ins_edge(graph, (void*)v_holder->data, (void*)link1);
+            holder = list_next(holder);
+        }
+        v_holder = list_next(v_holder);
+    }
+    print_graph(graph);
+    return 0;
 }

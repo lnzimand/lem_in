@@ -23,7 +23,12 @@ OBJS = ./libft/ft_strchr.o ./libft/ft_strrchr.o ./libft/ft_strstr.o ./libft/ft_s
 	   ./src/list_rem_next.o ./src/insert.o ./src/is_member.o ./src/remove.o ./src/graph_adjlist.o \
 	   ./src/graph_destroy.o ./src/graph_init.o ./src/graph_ins_edge.o ./src/graph_ins_vertex.o \
 	   ./src/graph_is_adjacent.o ./src/graph_rem_edge.o ./src/graph_rem_vertex.o ./src/set_init.o \
-	   ./src/queue_enqueue.o ./src/queue_dequeue.o ./src/breadth_first_search.o ./libft/ft_strpos.o
+	   ./src/queue_enqueue.o ./src/queue_dequeue.o ./src/breadth_first_search.o ./libft/ft_strpos.o \
+	   ./src/all_digits.o ./src/array_length.o ./src/check_coordinates.o ./src/create_path.o \
+	   ./src/error_handler.o ./src/errors.o ./src/get_links.o ./src/get_position.o ./src/get_rooms.o \
+	   ./src/graph_alloc.o ./src/link_alloc.o ./src/list_alloc.o ./src/match.o ./src/move_ants.o \
+	   ./src/number_of_ants.o ./src/path_init.o ./src/path_ins_next.o ./src/print_array.o \
+	   ./src/print_graph.o ./src/print_out.o ./src/read_input.o ./src/store_link.o
 
 libftmake = $(MAKE) -C libft
 

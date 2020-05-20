@@ -6,3 +6,6 @@ lem_inII.c
 example.c
 *.o
 lem_inIII.c
+*.map
+sometest
+tests

@@ -56,6 +56,6 @@ char		*ft_itoa(int n)
 	if (negative == 1)
 		s1[i++] = '-';
 	s1[i] = '\0';
-	s1 = ft_strrev(s1);
+	ft_strrev(s1);
 	return (s1);
 }

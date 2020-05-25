@@ -12,18 +12,22 @@
 
 #include "libft.h"
 
-char	*ft_strrev(char *s)
+void	ft_strrev(char *s)
 {
-	int		i;
-	int		j;
-	char	*rs;
+	char	*p1;
+	char	*p2;
+	char	temp;
 
-	j = 0;
-	i = ft_strlen(s) - 1;
-	if (!(rs = (char*)malloc(sizeof(char) * (i + 1))))
-		return (NULL);
-	while (i >= 0)
-		rs[j++] = s[i--];
-	rs[j] = '\0';
-	return (rs);
+	if (!s)
+		return ;
+	p1 = s;
+	p2 = s + ft_strlen(s) - 1;
+	while (p2 > p1)
+	{
+		temp = *p1;
+		*p1 = *p2;
+		*p2 = temp;
+		p1++;
+		p2--;
+	}
 }

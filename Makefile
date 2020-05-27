@@ -29,7 +29,8 @@ OBJS = ./libft/ft_strchr.o ./libft/ft_strrchr.o ./libft/ft_strstr.o ./libft/ft_s
 	   ./src/graph_alloc.o ./src/link_alloc.o ./src/list_alloc.o ./src/match.o ./src/move_ants.o \
 	   ./src/number_of_ants.o ./src/path_init.o ./src/path_ins_next.o ./src/print_array.o \
 	   ./src/print_graph.o ./src/print_out.o ./src/read_input.o ./src/store_link.o \
-	   ./src/path_rem_next.o ./src/print_list.o ./src/path_destroy.o
+	   ./src/path_rem_next.o ./src/print_list.o ./src/path_destroy.o ./src/./free_array.o \
+	   ./src/free_list.o
 
 libftmake = $(MAKE) -C libft
 

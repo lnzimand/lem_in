@@ -1,10 +1,12 @@
 #include "../lem_in.h"
+#include <stdio.h>
 
 void    move_ants(Path *path, int ants)
 {
     path_elmt   *element;
     path_elmt   *from_start;
     int         new_line;
+    char        *temp;
 
     new_line = 0;
     element = path_head(path);
@@ -16,8 +18,10 @@ void    move_ants(Path *path, int ants)
         if ((!from_start->next->occupied && from_start->occupied != 0) \
         || from_start->next == path_tail(path))
         {
-            from_start->next->ant_name = ft_strdup(ft_itoa(from_start->occupied));
-            print_out(ft_itoa(from_start->occupied), from_start->next->room_name);
+            temp = ft_itoa(from_start->occupied);
+            from_start->next->ant_name = ft_strdup(temp);
+            print_out(temp, from_start->next->room_name);
+            ft_strdel(&temp);
             from_start->occupied--;
             from_start->next->occupied++;
             ft_putchar('\n');
@@ -33,6 +37,8 @@ void    move_ants(Path *path, int ants)
                 element->occupied++;
                 element->prev->occupied--;
                 print_out(element->prev->ant_name, element->room_name);
+                if (element->next == NULL)
+                    free(element->ant_name);
             }
             element = path_prev(element);
         }

@@ -20,7 +20,7 @@ int		get_line(int fd, char **line, char **store)
 
 	temp = store[fd];
 	if ((endl = (!(ft_strchr(store[fd], '\n')))))
-		*line = ft_strdup(temp);
+		*line = temp;
 	else
 		*line = ft_strsub(store[fd], 0, (ft_strchr(store[fd], '\n') - \
 		store[fd]));
@@ -32,6 +32,7 @@ int		get_next_line(const int fd, char **line)
 	static char	*store[9999];
 	char		buffer[BUFF_SIZE + 1];
 	char		*temp;
+	char		*holder;
 	int			b;
 
 	if (fd < 0 || !line || (!store[fd] && !(store[fd] = ft_strnew(1))))
@@ -48,7 +49,11 @@ int		get_next_line(const int fd, char **line)
 	get_line(fd, line, store);
 	temp = ft_strchr(store[fd], '\n');
 	if (temp != NULL)
+	{
+		holder = store[fd];
 		store[fd] = ft_strsub(temp, 1, ft_strlen(temp));
+		ft_strdel(&holder);
+	}
 	else
 		store[fd] = NULL;
 	return (!(!store[fd] && !ft_strlen(*line)));

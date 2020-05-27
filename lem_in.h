@@ -106,21 +106,21 @@ int         queue_enqueue(List *queue, const void *data);
 int         queue_dequeue(List *queue, void **data);
 int         bfs(Graph *graph, BfsVertex *start, List *hops);
 void        print_array(char **arr);
-void        all_digits(char **arr);
+int         all_digits(char **arr);
 int         arr_length(char **arr);
 void        check_coordinates(char *position, char *str);
-void        create_path(Graph *graph, int ants_number, char *end);
+void        create_path(Graph *graph, int ants_number, char *end, char *start);
 void        error_handler(char *position, char  *error_msg);
-void        errors(char *room);
+int         errors(char *room);
 void        get_links(char **arr, list_elmt **head);
 char        *get_position(char **arr, char *position);
-void        get_rooms(char **arr, char *start, char *end, list_elmt **rooms);
+void        get_rooms(char **arr, list_elmt **rooms);
 Graph       *graph_alloc(void);
 list_elmt   *link_alloc(void);
 List        *list_alloc(void);
 int         match(const void *data1, const void *data2);
 void        move_ants(Path *path, int ants);
-int         get_number_of_ants(char *str);
+int         get_number_of_ants(char **str);
 void        path_init(Path *path);
 int         path_ins_next(Path *path, path_elmt *element, const void *data);
 int         path_rem_next(Path *path, path_elmt *element, void **data);
@@ -131,6 +131,8 @@ void        print_graph(Graph *graph);
 void	    print_out(char *ant_name, char *room);
 char        *read_input(void);
 void        store_link(char *str, list_elmt **head);
+void        free_array(char **arr);
+void        free_list_elmt(list_elmt *head);
 
 #define queue_init list_init
 #define queue_destroy list_destroy

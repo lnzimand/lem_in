@@ -1,18 +1,23 @@
 #include "../lem_in.h"
 
-void    all_digits(char **arr)
+int    all_digits(char **arr)
 {
+    int     index;
+    int     ins_index;
+
+    index = 0;
     if (arr_length(arr) != 2)
-        error_handler("room coordinates ", "INCORRECT INPUT!");
-    while (*arr)
+        return 0;
+    while (arr[index])
     {
-        while (**arr)
+        ins_index = 0;
+        while (arr[index][ins_index])
         {
-            if (!ft_isdigit(**arr))
-                error_handler("room coordinates ", "INCORRECT INPUT!");
-            (*arr)++;
+            if (!ft_isdigit(arr[index][ins_index]))
+                return 0;
+            ins_index++;
         }
-        arr++;
+        index++;
     }
-    return ;
+    return 1;
 }

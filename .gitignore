@@ -8,4 +8,4 @@ example.c
 lem_inIII.c
 *.map
 sometest
-tests
+*.log

@@ -22,6 +22,40 @@ void    print_map(char **arr, int ants_number)
     ft_putchar('\n');
 }
 
+/*****************************************************************************
+*  ----------------------------- input_to_array ---------------------------  *
+******************************************************************************/
+
+char    **input_to_array(void)
+{
+    char    *str;
+    char    **arr;
+
+    /***********************************************************************
+    *  Get string, delimetered by "'", from stdin.                         *
+    ************************************************************************/
+    str = read_input();
+    /***********************************************************************
+    *  Break up a string, delimetered by "'" into an array                 *
+    ************************************************************************/
+    arr = ft_strsplit(str, '\'');
+    ft_strdel(&str);
+    return arr;
+}
+
+/*****************************************************************************
+*  --------------------- insert rooms in a graph --------------------------  *
+******************************************************************************/
+
+void    insert_vertices(Graph *graph, list_elmt *vertices)
+{
+    while (vertices)
+    {
+        graph_ins_vertex(graph, vertices->data);
+        vertices = list_next(vertices);
+    }
+}
+
 int     main(void)
 {
     BfsVertex   bfs_start;
@@ -36,39 +70,24 @@ int     main(void)
     char        *start_name;
     char        *end_name;
     char        **name;
-    char        *str;
     char        *link1;
     char        *link2;
     Graph       *graph;
 
-    hops = list_alloc();
-    graph = graph_alloc();
-    graph_init(graph, &match, &graph_destroy);
     head = NULL;
     vertices = NULL;
-    str = read_input();
-    name = ft_strsplit(str, '\'');
-    ants_number = get_number_of_ants((*name));
+    name = input_to_array();
+    ants_number = get_number_of_ants(name);
+    get_rooms(++name, &vertices);
+    get_links(name, &head);
     start_name = get_position(name, START);
     start = ft_strsub(start_name, 0, ft_strchr(start_name, ' ') - start_name);
-    store_link(start, &vertices);
     end_name = get_position(name, END);
     end = ft_strsub(end_name, 0, ft_strchr(end_name, ' ') - end_name);
-    store_link(end, &vertices);
-    get_links(name, &head);
-    get_rooms(++name, start_name, end_name, &vertices);
-    holder = head;
-    while (holder) {
-        link1 = ft_strsub(holder->data, 0, ft_strchr((char*)holder->data, '-') - (char*)holder->data);
-        link2 = ft_strsub(holder->data, (ft_strchr((char*)holder->data, '-') - (char*)holder->data) + 1, ft_strlen(holder->data));
-        holder = list_next(holder);
-    }
     v_holder = vertices;
-    while (v_holder)
-    {
-        graph_ins_vertex(graph, v_holder->data);
-        v_holder = list_next(v_holder);
-    }
+    graph = graph_alloc();
+    graph_init(graph, &match, &graph_destroy);
+    insert_vertices(graph, vertices);
     v_holder = vertices;
     while (v_holder)
     {
@@ -86,10 +105,14 @@ int     main(void)
         v_holder = list_next(v_holder);
     }
     bfs_start.data = ft_strdup(start);
+    hops = list_alloc();
     bfs(graph, &bfs_start, hops);
     verify_connections(hops, end, start);
     print_map(name, ants_number);
-    create_path(graph, ants_number, end);
-    // graph_destroy(graph);
+    create_path(graph, ants_number, end, start);
+    graph_destroy(graph);
+    list_destroy(hops);
+    free(graph);
+    free(hops);
     return 0;
 }

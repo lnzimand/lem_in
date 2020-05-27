@@ -12,8 +12,6 @@ void graph_destroy(Graph *graph)
     while (list_size(&graph->adjlists) > 0) {
         if (list_rem_next(&graph->adjlists, NULL, (void **)&adjlist) == 0) {
             list_destroy(&adjlist->adjacent);
-            if (graph->destroy != NULL)
-                graph->destroy(adjlist->vertex);
             free(adjlist);
         }
     }

@@ -107,7 +107,7 @@ int         set_is_member(const List *set, const void *data);
 int         set_remove(List *set, void **data);
 int         queue_enqueue(List *queue, const void *data);
 int         queue_dequeue(List *queue, void **data);
-int         bfs(Graph *graph, BfsVertex *start, List *hops);
+int         bfs(Graph graph, BfsVertex *start, List *hops, int ants, char *end_pos, char *start_pos, char **name);
 void        print_array(char **arr);
 int         all_digits(char **arr);
 int         arr_length(char **arr);
@@ -137,6 +137,8 @@ void        store_link(char *str, list_elmt **head);
 void        free_array(char **arr);
 void        free_list_elmt(list_elmt *head);
 void        free_alloc_mem(void *data);
+void        print_map(char **arr);
+void        verify_connections(List *hops, void *end, void *start);
 
 #define queue_init list_init
 #define queue_destroy list_destroy

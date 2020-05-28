@@ -1,25 +1,4 @@
 #include "lem_in.h"
-#include <mcheck.h>
-
-void    verify_connections(List *hops, void *end, void *start)
-{
-    list_elmt   *element;
-
-    element = list_head(hops);
-    while (element != NULL)
-    {
-        if (match(element->data, end) || match(element->data, start))
-            error_handler("NO POSSIBLE SOLUTION ", "End/Start NOT CONNECTED!");
-        element = list_next(element);
-    }
-    
-}
-
-void    print_map(char **arr)
-{
-    print_array(arr);
-    ft_putchar('\n');
-}
 
 /*****************************************************************************
 *  ----------------------------- input_to_array ---------------------------  *
@@ -106,8 +85,6 @@ void    insert_vertices(Graph *graph, List *rooms)
     }
 }
 
-#include <stdio.h>
-
 void    remove_edges(Graph *graph, List *rooms, List *links)
 {
     list_elmt   *vertices;
@@ -137,7 +114,6 @@ void    remove_edges(Graph *graph, List *rooms, List *links)
 
 int     main(void)
 {
-    mtrace();
     Graph       *graph;
     BfsVertex   bfs_start;
     List        *hops;
@@ -172,10 +148,7 @@ int     main(void)
     bfs_start.data = ft_strdup(start);
     hops = list_alloc();
     list_init(hops, &free_alloc_mem);
-    bfs(graph, &bfs_start, hops);
-    verify_connections(hops, end, start);
-    print_map(name);
-    create_path(graph, ants_number, end, start);
+    bfs(*graph, &bfs_start, hops, ants_number, end, start, name);
     // remove_edges(graph, rooms, links);
     free_array(name);
     // graph_destroy(graph);

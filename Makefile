@@ -30,7 +30,7 @@ OBJS = ./libft/ft_strchr.o ./libft/ft_strrchr.o ./libft/ft_strstr.o ./libft/ft_s
 	   ./src/number_of_ants.o ./src/path_init.o ./src/path_ins_next.o ./src/print_array.o \
 	   ./src/print_graph.o ./src/print_out.o ./src/read_input.o ./src/store_link.o \
 	   ./src/path_rem_next.o ./src/print_list.o ./src/path_destroy.o ./src/./free_array.o \
-	   ./src/free_list.o ./src/free_alloc_mem.o
+	   ./src/free_list.o ./src/free_alloc_mem.o ./src/verify_connections.o ./src/print_map.o
 
 libftmake = $(MAKE) -C libft
 

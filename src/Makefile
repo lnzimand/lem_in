@@ -9,7 +9,7 @@ SRCS = ./list_destroy.c ./list_init.c ./list_ins_next.c ./list_rem_next.c ./inse
 		./get_rooms.c ./graph_alloc.c ./link_alloc.c ./list_alloc.c ./match.c \
 		./move_ants.c ./number_of_ants.c ./path_init.c ./path_ins_next.c ./print_array.c \
 		./print_graph.c ./print_out.c ./read_input.c ./store_link.c ./path_destroy.c \
-		./path_rem_next.c ./print_list.c ./free_array.c ./free_list.c
+		./path_rem_next.c ./print_list.c ./free_array.c ./free_list.c ./free_alloc_mem.c
 
 OBJS = ./list_destroy.o ./list_init.o ./list_ins_next.o ./list_rem_next.o ./insert.o \
 		./is_member.o ./remove.o ./graph_adjlist.o ./graph_destroy.o ./graph_init.o \
@@ -20,7 +20,7 @@ OBJS = ./list_destroy.o ./list_init.o ./list_ins_next.o ./list_rem_next.o ./inse
 		./get_rooms.o ./graph_alloc.o ./link_alloc.o ./list_alloc.o ./match.o \
 		./move_ants.o ./number_of_ants.o ./path_init.o ./path_ins_next.o ./print_array.o \
 		./print_graph.o ./print_out.o ./read_input.o ./store_link.o ./path_destroy.o \
-		./path_rem_next.o ./print_list.o ./free_array.o ./free_list.o
+		./path_rem_next.o ./print_list.o ./free_array.o ./free_list.o ./free_alloc_mem.o
 
 all:
 	gcc $(FLAGS) $(SRCS)

@@ -1,4 +1,5 @@
 #include "lem_in.h"
+#include <mcheck.h>
 
 void    verify_connections(List *hops, void *end, void *start)
 {
@@ -14,10 +15,8 @@ void    verify_connections(List *hops, void *end, void *start)
     
 }
 
-void    print_map(char **arr, int ants_number)
+void    print_map(char **arr)
 {
-    ft_putnbr(ants_number);
-    ft_putchar('\n');
     print_array(arr);
     ft_putchar('\n');
 }
@@ -43,76 +42,150 @@ char    **input_to_array(void)
     return arr;
 }
 
+int     get_start_end_pos(char **name, char **start, char **end)
+{
+    char    *start_name;
+    char    *end_name;
+
+    start_name = get_position(name, START);
+    if (!start_name)
+        return 0;
+    end_name = get_position(name, END);
+    if (!end_name)
+    {
+        ft_strdel(&start_name);
+        return 0;
+    }
+    *start = ft_strsub(start_name, 0, ft_strchr(start_name, ' ') - start_name);
+    *end = ft_strsub(end_name, 0, ft_strchr(end_name, ' ') - end_name);
+    ft_strdel(&start_name);
+    ft_strdel(&end_name);
+    return 1;
+}
+
+void    insert_edges(Graph *graph, List *rooms, List *links)
+{
+    list_elmt   *vertices;
+    list_elmt   *holder;
+    char        *link1;
+    char        *link2;
+
+    vertices = list_head(rooms);
+    while (vertices != NULL)
+    {
+        holder = list_head(links);
+        while (holder != NULL)
+        {
+            link1 = ft_strsub(holder->data, 0, ft_strchr((char*)holder->data, '-') - (char*)holder->data);
+            link2 = ft_strsub(holder->data, (ft_strchr((char*)holder->data, '-') - (char*)holder->data) + 1, ft_strlen(holder->data));
+            if (match((void*)link1, (void*)vertices->data))
+                graph_ins_edge(graph, (void*)vertices->data, (void*)ft_strdup(link2));
+            if (match((void*)link2, (void*)vertices->data))
+                graph_ins_edge(graph, (void*)vertices->data, (void*)ft_strdup(link1));
+            ft_strdel(&link1);
+            ft_strdel(&link2);
+            holder = list_next(holder);
+        }
+        vertices = list_next(vertices);
+    }
+}
+
 /*****************************************************************************
 *  --------------------- insert rooms in a graph --------------------------  *
 ******************************************************************************/
 
-void    insert_vertices(Graph *graph, list_elmt *vertices)
+void    insert_vertices(Graph *graph, List *rooms)
 {
-    while (vertices)
+    list_elmt   *element;
+
+    element = list_head(rooms);
+    while (element != NULL)
     {
-        graph_ins_vertex(graph, vertices->data);
+        graph_ins_vertex(graph, ft_strdup(element->data));
+        element = list_next(element);
+    }
+}
+
+#include <stdio.h>
+
+void    remove_edges(Graph *graph, List *rooms, List *links)
+{
+    list_elmt   *vertices;
+    list_elmt   *holder;
+    char        *link1;
+    char        *link2;
+
+    vertices = list_head(rooms);
+    while (vertices != NULL)
+    {
+        holder = list_head(links);
+        while (holder != NULL)
+        {
+            link1 = ft_strsub(holder->data, 0, ft_strchr((char*)holder->data, '-') - (char*)holder->data);
+            link2 = ft_strsub(holder->data, (ft_strchr((char*)holder->data, '-') - (char*)holder->data) + 1, ft_strlen(holder->data));
+            if (match((void*)link1, (void*)vertices->data))
+                graph_rem_edge(graph, (void*)vertices->data, (void**)&link2);
+            if (match((void*)link2, (void*)vertices->data))
+                graph_rem_edge(graph, (void*)vertices->data, (void**)&link1);
+            ft_strdel(&link1);
+            ft_strdel(&link2);
+            holder = list_next(holder);
+        }
         vertices = list_next(vertices);
     }
 }
 
 int     main(void)
 {
+    mtrace();
+    Graph       *graph;
     BfsVertex   bfs_start;
     List        *hops;
-    list_elmt   *head;
-    list_elmt   *holder;
-    list_elmt   *vertices;
-    list_elmt   *v_holder;
+    List        *links;
+    List        *rooms;
     int         ants_number;
     char        *start;
     char        *end;
-    char        *start_name;
-    char        *end_name;
     char        **name;
-    char        *link1;
-    char        *link2;
-    Graph       *graph;
 
-    head = NULL;
-    vertices = NULL;
     name = input_to_array();
     ants_number = get_number_of_ants(name);
-    get_rooms(++name, &vertices);
-    get_links(name, &head);
-    start_name = get_position(name, START);
-    start = ft_strsub(start_name, 0, ft_strchr(start_name, ' ') - start_name);
-    end_name = get_position(name, END);
-    end = ft_strsub(end_name, 0, ft_strchr(end_name, ' ') - end_name);
-    v_holder = vertices;
-    graph = graph_alloc();
-    graph_init(graph, &match, &graph_destroy);
-    insert_vertices(graph, vertices);
-    v_holder = vertices;
-    while (v_holder)
+    rooms = list_alloc();
+    list_init(rooms, &free_alloc_mem);
+    get_rooms(name, rooms);
+    links = list_alloc();
+    list_init(links, &free_alloc_mem);
+    get_links(name, links);
+    if (!get_start_end_pos(name, &start, &end))
     {
-        holder = head;
-        while (holder)
-        {
-            link1 = ft_strsub(holder->data, 0, ft_strchr((char*)holder->data, '-') - (char*)holder->data);
-            link2 = ft_strsub(holder->data, (ft_strchr((char*)holder->data, '-') - (char*)holder->data) + 1, ft_strlen(holder->data));
-            if (match((void*)link1, (void*)v_holder->data))
-                graph_ins_edge(graph, (void*)v_holder->data, (void*)link2);
-            if (match((void*)link2, (void*)v_holder->data))
-                graph_ins_edge(graph, (void*)v_holder->data, (void*)link1);
-            holder = list_next(holder);
-        }
-        v_holder = list_next(v_holder);
+        free_array(name);
+        list_destroy(rooms);
+        list_destroy(links);
+        free(rooms);
+        free(links);
+        error_handler("INCORRECT INPUT", " of start/end/coordinates");
     }
+    graph = graph_alloc();
+    graph_init(graph, &match, &free_alloc_mem);
+    insert_vertices(graph, rooms);
+    insert_edges(graph, rooms, links);
     bfs_start.data = ft_strdup(start);
     hops = list_alloc();
+    list_init(hops, &free_alloc_mem);
     bfs(graph, &bfs_start, hops);
     verify_connections(hops, end, start);
-    print_map(name, ants_number);
+    print_map(name);
     create_path(graph, ants_number, end, start);
-    graph_destroy(graph);
+    // remove_edges(graph, rooms, links);
+    free_array(name);
+    // graph_destroy(graph);
+    list_destroy(rooms);
+    list_destroy(links);
     list_destroy(hops);
     free(graph);
     free(hops);
+    free(links);
+    free(rooms);
+    free(bfs_start.data);
     return 0;
 }

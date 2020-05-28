@@ -26,6 +26,7 @@ typedef struct          List_
     int                 size;
     int                 (*match)(const void *key, const void *key2);
     void                (*destroy)(void *data);
+    
     list_elmt           *head;
     list_elmt           *tail;
 }                       List;
@@ -44,6 +45,8 @@ typedef struct          path_elmt_
 typedef struct      Path_
 {
     int             size;
+    void            (*destroy)(void *data);
+    
     path_elmt       *head;
     path_elmt       *tail;
 }                   Path;
@@ -62,7 +65,7 @@ typedef struct  Graph_
     int         ecount;
 
     int         (*match)(const void *key1, const void *key2);
-    void        (*destroy)(struct Graph_ *data);
+    void        (*destroy)(void *data);
 
     List        adjlists;
 }               Graph;
@@ -86,7 +89,7 @@ typedef struct      BfsVertex_
 }                   BfsVertex;
 
 /* Public interface */
-void        graph_init(Graph *graph, int (*match)(const void *key1, const void *key2), void (*destroy)(Graph *data));
+void        graph_init(Graph *graph, int (*match)(const void *key1, const void *key2), void (*destroy)(void *data));
 void        graph_destroy(Graph *graph);
 void        list_init(List *list, void (*destroy)(void *data));
 void        list_destroy(List *list);
@@ -108,20 +111,20 @@ int         bfs(Graph *graph, BfsVertex *start, List *hops);
 void        print_array(char **arr);
 int         all_digits(char **arr);
 int         arr_length(char **arr);
-void        check_coordinates(char *position, char *str);
+int         correct_coord(char *str);
 void        create_path(Graph *graph, int ants_number, char *end, char *start);
 void        error_handler(char *position, char  *error_msg);
 int         errors(char *room);
-void        get_links(char **arr, list_elmt **head);
+void        get_links(char **arr, List *head);
 char        *get_position(char **arr, char *position);
-void        get_rooms(char **arr, list_elmt **rooms);
+void        get_rooms(char **arr, List *rooms);
 Graph       *graph_alloc(void);
 list_elmt   *link_alloc(void);
 List        *list_alloc(void);
 int         match(const void *data1, const void *data2);
 void        move_ants(Path *path, int ants);
 int         get_number_of_ants(char **str);
-void        path_init(Path *path);
+void        path_init(Path *path, void (*destroy)(void *data));
 int         path_ins_next(Path *path, path_elmt *element, const void *data);
 int         path_rem_next(Path *path, path_elmt *element, void **data);
 void        path_destroy(Path *path);
@@ -133,6 +136,7 @@ char        *read_input(void);
 void        store_link(char *str, list_elmt **head);
 void        free_array(char **arr);
 void        free_list_elmt(list_elmt *head);
+void        free_alloc_mem(void *data);
 
 #define queue_init list_init
 #define queue_destroy list_destroy

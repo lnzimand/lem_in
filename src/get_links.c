@@ -3,7 +3,7 @@
 *  ----------------------------- get_links --------------------------------  *
 ******************************************************************************/
 
-void   get_links(char **arr, list_elmt **head)
+void   get_links(char **arr, List *head)
 {
     while (*arr)
     {
@@ -11,7 +11,7 @@ void   get_links(char **arr, list_elmt **head)
         *  Store any string with '-'                                                 *
         ******************************************************************************/
         if (ft_strchr(*arr, '-'))
-            store_link(*arr, head);
+            list_ins_next(head, NULL, *arr);
         arr++;
     }
 }

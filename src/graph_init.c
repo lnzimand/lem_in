@@ -4,7 +4,7 @@
 *  ------------------------------ graph_init ------------------------------  *
 ******************************************************************************/
 
-void graph_init(Graph *graph, int (*match)(const void *key1, const void *key2), void (*destroy)(Graph *data))
+void graph_init(Graph *graph, int (*match)(const void *key1, const void *key2), void (*destroy)(void *data))
 {
     /*****************************************************************************
     *  Initialize the graph.                                                     *

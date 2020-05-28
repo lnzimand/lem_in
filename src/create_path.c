@@ -8,7 +8,7 @@ void    create_path(Graph *graph, int ants_number, char *end, char *start)
     char        *room_holder;
 
     path = (Path*)malloc(sizeof(Path));
-    path_init(path);
+    path_init(path, NULL);
     element = list_head(&graph->adjlists);
     while (element != NULL)
     {
@@ -29,5 +29,5 @@ void    create_path(Graph *graph, int ants_number, char *end, char *start)
     path_ins_next(path, NULL, (void*)end);
     move_ants(path, ants_number);
     path_destroy(path);
-    // free(path);`
+    free(path);
 }

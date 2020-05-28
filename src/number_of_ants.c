@@ -4,6 +4,7 @@ int     get_number_of_ants(char **arr)
 {
     char    *temp;
     char    *holder;
+    int     num;
 
     temp = ft_strtrim(*arr);
     holder = temp;
@@ -23,5 +24,7 @@ int     get_number_of_ants(char **arr)
         }
         temp++;
     }
-    return ft_atoi(holder);
+    num = ft_atoi(holder);
+    ft_strdel(&holder);
+    return num;
 }

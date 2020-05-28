@@ -29,10 +29,11 @@ char    *get_position(char **arr, char *position)
     *  Validation of a room.                                                 *
     **************************************************************************/
     if (!pos_found)
-        error_handler(position, " NOT FOUND!");
+        return pos_found;
     else if (!str)
-        error_handler(position, " NOT FOUND!");
+        return str;
+    else if (correct_coord(str))
+        return pos_found;
     else
-        check_coordinates(position, str);
-    return pos_found;
+        return NULL;
 }

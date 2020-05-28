@@ -20,6 +20,7 @@ void    move_ants(Path *path, int ants)
         {
             temp = ft_itoa(from_start->occupied);
             from_start->next->ant_name = ft_strdup(temp);
+            // printf("address ft_strdup: %p\n", from_start->next->ant_name);
             print_out(temp, from_start->next->room_name);
             ft_strdel(&temp);
             from_start->occupied--;
@@ -42,6 +43,8 @@ void    move_ants(Path *path, int ants)
             }
             element = path_prev(element);
         }
+        if (element == path_tail(path))
+            free(element->ant_name);
         new_line = 0;
         element = path_tail(path);
     }

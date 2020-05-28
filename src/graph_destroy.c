@@ -9,9 +9,13 @@ void graph_destroy(Graph *graph)
     /*****************************************************************************
     *  Remove each adjacency-list structure and destroy its adjacency list.      *
     *****************************************************************************/
-    while (list_size(&graph->adjlists) > 0) {
-        if (list_rem_next(&graph->adjlists, NULL, (void **)&adjlist) == 0) {
+    while (list_size(&graph->adjlists) > 0)
+    {
+        if (list_rem_next(&graph->adjlists, NULL, (void **)&adjlist) == 0)
+        {
             list_destroy(&adjlist->adjacent);
+            // if (graph->destroy != NULL)
+            //     graph->destroy(adjlist->vertex);
             free(adjlist);
         }
     }

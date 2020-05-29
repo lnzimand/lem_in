@@ -4,7 +4,7 @@
 #include "../lem_in.h"
 #include <stdio.h>
 
-int bfs(Graph graph, BfsVertex *start, List *hops, int ants, char *end_pos, \
+int bfs(Graph *graph, BfsVertex *start, List *hops, int ants, char *end_pos, \
 char *start_pos, char **name)
 {
     List        queue;
@@ -16,11 +16,11 @@ char *start_pos, char **name)
     list_elmt   *member;
 
     /* Initialize all of the vertices in the graph */
-    element = list_head(&graph_adjlists(&graph));
+    element = list_head(&graph_adjlists(graph));
     while (element != NULL)
     {
         clr_vertex = ((adj_list*)list_data(element))->vertex;
-        if (graph.match(clr_vertex, start->data))
+        if (graph->match(clr_vertex, start->data))
         {
             /* initialize the start vertex */
             clr_vertex->color = gray;
@@ -38,7 +38,7 @@ char *start_pos, char **name)
     *  Initialize the queue with the adjacency list of the start vertex.         *
     *****************************************************************************/
     queue_init(&queue, NULL);
-    if (graph_adjlist(&graph, start->data, &clr_adjlist) != 0)
+    if (graph_adjlist(graph, start->data, &clr_adjlist) != 0)
     {
         queue_destroy(&queue);
         return (-1);
@@ -60,7 +60,7 @@ char *start_pos, char **name)
         {
             adj_vertex = list_data(member);
             /* Determine the color of the next adjacent vertex */
-            if (graph_adjlist(&graph, adj_vertex, &clr_adjlist) != 0)
+            if (graph_adjlist(graph, adj_vertex, &clr_adjlist) != 0)
             {
                 queue_destroy(&queue);
                 return (-1);
@@ -92,7 +92,7 @@ char *start_pos, char **name)
     queue_destroy(&queue);
     /* Pass back the hop count for each vertex in a list */
     list_init(hops, NULL);
-    element = list_head(&graph_adjlists(&graph));
+    element = list_head(&graph_adjlists(graph));
     while (element != NULL)
     {
         /* Skip vertices that were not visited (those with hop counts of -1) */
@@ -109,6 +109,6 @@ char *start_pos, char **name)
     }
     verify_connections(hops, end_pos, start_pos);
     print_map(name);
-    create_path(&graph, ants, end_pos, start_pos);
+    create_path(graph, ants, end_pos, start_pos);
     return (0);
 }

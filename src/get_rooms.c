@@ -15,6 +15,7 @@ void    get_rooms(char **arr, List *rooms)
             {
                 free_array(holder);
                 list_destroy(rooms);
+                free(rooms);
                 error_handler("room coordinates ", "INCORRECT INPUT!");
             }
             // check_coordinates("room", *arr);
@@ -27,6 +28,7 @@ void    get_rooms(char **arr, List *rooms)
     {
         free_array(holder);
         list_destroy(rooms);
+        free(rooms);
         error_handler("rooms", " NOT FOUND");
     }
 }

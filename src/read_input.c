@@ -24,5 +24,10 @@ char    *read_input(void)
         ft_strdel(&holder);
         holder = str;
     }
+    if (ft_strlen(str) == 0)
+    {
+        free(holder);
+        error_handler("INCORRECT ", "INPUT");
+    }
     return (str);
 }

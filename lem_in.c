@@ -1,5 +1,5 @@
-#include "lem_in.h"
 
+#include "lem_in.h"
 /*****************************************************************************
 *  ----------------------------- input_to_array ---------------------------  *
 ******************************************************************************/
@@ -26,6 +26,8 @@ int     get_start_end_pos(char **name, char **start, char **end)
     char    *start_name;
     char    *end_name;
 
+    free(*start);
+    free(*end);
     start_name = get_position(name, START);
     if (!start_name)
         return 0;
@@ -112,11 +114,34 @@ void    remove_edges(Graph *graph, List *rooms, List *links)
     }
 }
 
+void    copy_graph(List list, int ecount, int vcount, int ants_number, char *end, \
+char *start, char **name)
+{
+    Graph   *graph;
+    BfsVertex   bfs_start;
+    List        *hops;
+
+    graph = graph_alloc();
+    graph->ecount = ecount;
+    graph->vcount = vcount;
+    graph->adjlists = list;
+    graph->match = match;
+    graph->destroy = NULL;
+
+    bfs_start.data = ft_strdup(start);
+    hops = list_alloc();
+    list_init(hops, &free_alloc_mem);
+
+    bfs(graph, &bfs_start, hops, ants_number, end, start, name);
+    list_destroy(hops);
+    free(hops);
+    free(bfs_start.data);
+    free(graph);
+}
+
 int     main(void)
 {
     Graph       *graph;
-    BfsVertex   bfs_start;
-    List        *hops;
     List        *links;
     List        *rooms;
     int         ants_number;
@@ -132,6 +157,8 @@ int     main(void)
     links = list_alloc();
     list_init(links, &free_alloc_mem);
     get_links(name, links);
+    start = ft_strnew(1);
+    end = ft_strnew(1);
     if (!get_start_end_pos(name, &start, &end))
     {
         free_array(name);
@@ -145,20 +172,16 @@ int     main(void)
     graph_init(graph, &match, &free_alloc_mem);
     insert_vertices(graph, rooms);
     insert_edges(graph, rooms, links);
-    bfs_start.data = ft_strdup(start);
-    hops = list_alloc();
-    list_init(hops, &free_alloc_mem);
-    bfs(*graph, &bfs_start, hops, ants_number, end, start, name);
-    // remove_edges(graph, rooms, links);
+    copy_graph(graph->adjlists, graph->ecount, graph->vcount, ants_number, end, \
+    start, name);
     free_array(name);
     // graph_destroy(graph);
     list_destroy(rooms);
     list_destroy(links);
-    list_destroy(hops);
     free(graph);
-    free(hops);
     free(links);
     free(rooms);
-    free(bfs_start.data);
+    free(start);
+    free(end);
     return 0;
 }

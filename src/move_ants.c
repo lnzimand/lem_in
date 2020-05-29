@@ -25,7 +25,8 @@ void    move_ants(Path *path, int ants)
             ft_strdel(&temp);
             from_start->occupied--;
             from_start->next->occupied++;
-            ft_putchar('\n');
+            if (element->occupied != ants)
+                ft_putchar('\n');
             new_line = 1;
         }
         if (!new_line)

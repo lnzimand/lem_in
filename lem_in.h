@@ -41,35 +41,6 @@ typedef struct          path_elmt_
     struct path_elmt_   *next;
 }                       path_elmt;
 
-/* structure for room */
-typedef struct      Path_
-{
-    int             size;
-    void            (*destroy)(void *data);
-    
-    path_elmt       *head;
-    path_elmt       *tail;
-}                   Path;
-
-/* structure for adjacency list*/
-typedef struct  adj_list_
-{
-    void        *vertex;
-    List        adjacent;
-}               adj_list;
-
-/* structure for graphs */
-typedef struct  Graph_
-{
-    int         vcount;
-    int         ecount;
-
-    int         (*match)(const void *key1, const void *key2);
-    void        (*destroy)(void *data);
-
-    List        adjlists;
-}               Graph;
-
 /* colors for vertices */
 typedef enum    vertex_color_ {
                 white,
@@ -87,6 +58,36 @@ typedef struct      BfsVertex_
     void            *parent;
     int             hops;
 }                   BfsVertex;
+
+/* structure for room */
+typedef struct      Path_
+{
+    int             size;
+    void            (*destroy)(void *data);
+    
+    path_elmt       *head;
+    path_elmt       *tail;
+}                   Path;
+
+/* structure for adjacency list*/
+typedef struct  adj_list_
+{
+    BfsVertex   bfs_vertex;
+    void        *vertex;
+    List        adjacent;
+}               adj_list;
+
+/* structure for graphs */
+typedef struct  Graph_
+{
+    int         vcount;
+    int         ecount;
+
+    int         (*match)(const void *key1, const void *key2);
+    void        (*destroy)(void *data);
+
+    List        adjlists;
+}               Graph;
 
 /* Public interface */
 void        graph_init(Graph *graph, int (*match)(const void *key1, const void *key2), void (*destroy)(void *data));
@@ -139,6 +140,11 @@ void        free_list_elmt(list_elmt *head);
 void        free_alloc_mem(void *data);
 void        print_map(char **arr);
 void        verify_connections(List *hops, void *end, void *start);
+void        copy_graph(List list, int ecount, int vcount, int ants_number, char *end, char *start, char **name);
+void        insert_vertices(Graph *graph, List *rooms);
+void        insert_edges(Graph *graph, List *rooms,List *links, List *holder);
+int         get_start_end_pos(char **name, char **start, char **end);
+char        **input_to_array(void);
 
 #define queue_init list_init
 #define queue_destroy list_destroy

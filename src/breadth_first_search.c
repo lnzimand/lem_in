@@ -10,6 +10,7 @@ char *start_pos, char **name)
     List        queue;
     adj_list    *adjlist;
     adj_list    *clr_adjlist;
+    BfsVertex   *vertex;
     BfsVertex   *clr_vertex;
     BfsVertex   *adj_vertex;
     list_elmt   *element;
@@ -19,8 +20,9 @@ char *start_pos, char **name)
     element = list_head(&graph_adjlists(graph));
     while (element != NULL)
     {
-        clr_vertex = ((adj_list*)list_data(element))->vertex;
-        if (graph->match(clr_vertex, start->data))
+        vertex = ((adj_list*)list_data(element))->vertex;
+        clr_vertex = &((adj_list*)list_data(element))->bfs_vertex;
+        if (graph->match(vertex, start->data))
         {
             /* initialize the start vertex */
             clr_vertex->color = gray;
@@ -65,13 +67,13 @@ char *start_pos, char **name)
                 queue_destroy(&queue);
                 return (-1);
             }
-            clr_vertex = clr_adjlist->vertex;
+            clr_vertex = &clr_adjlist->bfs_vertex;
             /* Color each white vertex gray and enqueue its adjacency list */
             if (clr_vertex->color == white)
             {
                 clr_vertex->parent = adjlist->vertex;
                 clr_vertex->color = gray;
-                clr_vertex->hops = ((BfsVertex*)adjlist->vertex)->hops + 1;
+                clr_vertex->hops = adjlist->bfs_vertex.hops + 1;;
                 if (queue_enqueue(&queue, clr_adjlist) != 0)
                 {
                     queue_destroy(&queue);
@@ -82,7 +84,7 @@ char *start_pos, char **name)
         }
         /* Dequeue the current adjacency list and color its vertex black */
         if (queue_dequeue(&queue, (void **)&adjlist) == 0)
-            ((BfsVertex *)adjlist->vertex)->color = black;
+            adjlist->bfs_vertex.color = black;
         else
         {
             queue_destroy(&queue);
@@ -96,7 +98,7 @@ char *start_pos, char **name)
     while (element != NULL)
     {
         /* Skip vertices that were not visited (those with hop counts of -1) */
-        clr_vertex = ((adj_list*)list_data(element))->vertex;
+        clr_vertex = &((adj_list*)list_data(element))->bfs_vertex;
         if (clr_vertex->hops == -1)
         {
             if (list_ins_next(hops, list_tail(hops), clr_vertex) != 0)

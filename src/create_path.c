@@ -16,7 +16,7 @@ void    create_path(Graph *graph, int ants_number, char *end, char *start)
         if (match((void*)room_holder, (void*)end) && !match((void*)room_holder, (void*)start))
         {
             path_ins_next(path, NULL, (void*)end);
-            clr_vertex = ((adj_list*)list_data(element))->vertex;
+            clr_vertex = &((adj_list*)list_data(element))->bfs_vertex;
             end = clr_vertex->parent;
             element = list_head(&graph->adjlists);
             if (end != NULL)

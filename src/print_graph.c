@@ -11,7 +11,7 @@ void    print_graph(Graph *graph)
     while (element != NULL)
     {
         holder = ((adj_list*)list_data(element))->vertex;
-        clr_vertex = ((adj_list*)list_data(element))->vertex;
+        clr_vertex = &((adj_list*)list_data(element))->bfs_vertex;
         adj_element = (((adj_list*)list_data(element))->adjacent).head;
         ft_putstr("Room: ");
         ft_putendl(holder);

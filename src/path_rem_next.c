@@ -4,12 +4,10 @@ int     path_rem_next(Path *path, path_elmt *element, void **data)
 {
     path_elmt       *old_element;
 
-    // if the path is empty
     if (!path_size(path))
         return (-1);
     if (!element)
     {
-        // Hanlde removal from the head of the path
         *data = path->head->ant_name;
         old_element = path->head;
         path->head = path->head->next;
@@ -18,7 +16,6 @@ int     path_rem_next(Path *path, path_elmt *element, void **data)
     }
     else
     {
-        // Handle removal from somewhere other than head
         if (!element->next)
             return (-1);
         *data = element->next->ant_name;

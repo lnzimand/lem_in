@@ -1,8 +1,4 @@
-/*****************************************************************************
-*  ---------------------------- breadth first search ------------------------*
-*****************************************************************************/
 #include "../lem_in.h"
-#include <stdio.h>
 
 int bfs(Graph *graph, BfsVertex *start, List *hops, int ants, char *end_pos, \
 char *start_pos, char **name)
@@ -16,7 +12,6 @@ char *start_pos, char **name)
     list_elmt   *element;
     list_elmt   *member;
 
-    /* Initialize all of the vertices in the graph */
     element = list_head(&graph_adjlists(graph));
     while (element != NULL)
     {
@@ -24,21 +19,16 @@ char *start_pos, char **name)
         clr_vertex = &((adj_list*)list_data(element))->bfs_vertex;
         if (graph->match(vertex, start->data))
         {
-            /* initialize the start vertex */
             clr_vertex->color = gray;
             clr_vertex->hops = 0;
         }
         else
         {
-            /* intitialize vertices other than the start vertex */
             clr_vertex->color = white;
             clr_vertex->hops = -1;
         }
         element = list_next(element);
     }
-    /*****************************************************************************
-    *  Initialize the queue with the adjacency list of the start vertex.         *
-    *****************************************************************************/
     queue_init(&queue, NULL);
     if (graph_adjlist(graph, start->data, &clr_adjlist) != 0)
     {
@@ -50,25 +40,19 @@ char *start_pos, char **name)
         queue_destroy(&queue);
         return (-1);
     }
-    /*****************************************************************************
-    *  Perform breadth-first search.                                             *
-    *****************************************************************************/
     while (queue_size(&queue) > 0)
     {
         adjlist = queue_peek(&queue);
-        /* Traverse each vertex in the current adjacency list */
         member = list_head(&adjlist->adjacent);
         while (member != NULL)
         {
             adj_vertex = list_data(member);
-            /* Determine the color of the next adjacent vertex */
             if (graph_adjlist(graph, adj_vertex, &clr_adjlist) != 0)
             {
                 queue_destroy(&queue);
                 return (-1);
             }
             clr_vertex = &clr_adjlist->bfs_vertex;
-            /* Color each white vertex gray and enqueue its adjacency list */
             if (clr_vertex->color == white)
             {
                 clr_vertex->parent = adjlist->vertex;
@@ -82,7 +66,6 @@ char *start_pos, char **name)
             }
             member = list_next(member);
         }
-        /* Dequeue the current adjacency list and color its vertex black */
         if (queue_dequeue(&queue, (void **)&adjlist) == 0)
             adjlist->bfs_vertex.color = black;
         else
@@ -92,12 +75,10 @@ char *start_pos, char **name)
         }
     }
     queue_destroy(&queue);
-    /* Pass back the hop count for each vertex in a list */
     list_init(hops, NULL);
     element = list_head(&graph_adjlists(graph));
     while (element != NULL)
     {
-        /* Skip vertices that were not visited (those with hop counts of -1) */
         clr_vertex = &((adj_list*)list_data(element))->bfs_vertex;
         if (clr_vertex->hops == -1)
         {

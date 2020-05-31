@@ -2,9 +2,6 @@
 
 void set_init(List *set, int (*match)(const void *key1, const void *key2), void (*destroy)(void *data))
 {
-    /*****************************************************************************
-    *  Initialize the set.                                                       *
-    *****************************************************************************/
     list_init(set, destroy);
     set->match = match;
     return;

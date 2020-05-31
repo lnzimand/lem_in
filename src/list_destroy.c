@@ -1,6 +1,5 @@
 #include "../lem_in.h"
 
-/* free dynamically allocated data */
 void    list_destroy(List *list)
 {
     void        *data;

@@ -1,6 +1,5 @@
 #include "../lem_in.h"
 
-/* free dynamically allocated data */
 void    path_destroy(Path *path)
 {
     void        *data;

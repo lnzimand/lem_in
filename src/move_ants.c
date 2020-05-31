@@ -1,5 +1,4 @@
 #include "../lem_in.h"
-#include <stdio.h>
 
 void    move_ants(Path *path, int ants)
 {

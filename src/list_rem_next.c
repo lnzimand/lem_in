@@ -4,12 +4,10 @@ int     list_rem_next(List *list, list_elmt *element, void **data)
 {
     list_elmt       *old_element;
 
-    // if the list is empty
     if (!list_size(list))
         return (-1);
     if (!element)
     {
-        // Hanlde removal from the head of the list
         *data = list->head->data;
         old_element = list->head;
         list->head = list->head->next;
@@ -18,7 +16,6 @@ int     list_rem_next(List *list, list_elmt *element, void **data)
     }
     else
     {
-        // Handle removal from somewhere other than head
         if (!element->next)
             return (-1);
         *data = element->next->data;

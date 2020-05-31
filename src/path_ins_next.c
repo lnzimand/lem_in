@@ -5,16 +5,13 @@ int     path_ins_next(Path *path, path_elmt *element, const void *data)
     path_elmt   *new_element;
     path_elmt   *head;
 
-    // Allocate storage for the element
     if (!(new_element = (path_elmt*)malloc(sizeof(path_elmt))))
         return (-1);
-    // Insert the element into the path
     new_element->room_name = (void*)data;
     new_element->occupied = 0;
     new_element->prev = NULL;
     if (!element)
     {
-        // Handle insertion at the head of the path
         if (!path_size(path))
             path->tail = new_element;
         new_element->next = path->head;

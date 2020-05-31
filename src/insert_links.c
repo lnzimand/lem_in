@@ -21,8 +21,6 @@ void    insert_edges(Graph *graph, List *rooms, List *links, List *hold_malloc)
                 graph_ins_edge(graph, (void*)vertices->data, (void*)link1);
             list_ins_next(hold_malloc, NULL, (void*)link1);
             list_ins_next(hold_malloc, NULL, (void*)link2);
-            // ft_strdel(&link1);
-            // ft_strdel(&link2);
             holder = list_next(holder);
         }
         vertices = list_next(vertices);

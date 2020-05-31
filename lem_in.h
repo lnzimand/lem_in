@@ -1,7 +1,3 @@
-/****************************
----------- list.h -----------
-*****************************/
-
 #ifndef LIST_H
 #define LIST_H
 
@@ -12,7 +8,6 @@
 #define START "##start"
 #define END "##end"
 
-/* a structure for linked list elements */
 typedef struct          list_elmt_
 {
     void                *data;
@@ -20,7 +15,6 @@ typedef struct          list_elmt_
 
 }                       list_elmt;
 
-/* a structure for linked lists */
 typedef struct          List_
 {
     int                 size;
@@ -31,7 +25,6 @@ typedef struct          List_
     list_elmt           *tail;
 }                       List;
 
-/* structure for room */
 typedef struct          path_elmt_
 {
     void                *room_name;
@@ -41,16 +34,12 @@ typedef struct          path_elmt_
     struct path_elmt_   *next;
 }                       path_elmt;
 
-/* colors for vertices */
 typedef enum    vertex_color_ {
                 white,
                 gray,
                 black
 }               vertex_color;
 
-/*****************************************************************************
-*  Define a structure for vertices in a breadth-first search.                *
-*****************************************************************************/
 typedef struct      BfsVertex_
 {
     void            *data;
@@ -59,7 +48,6 @@ typedef struct      BfsVertex_
     int             hops;
 }                   BfsVertex;
 
-/* structure for room */
 typedef struct      Path_
 {
     int             size;
@@ -69,7 +57,6 @@ typedef struct      Path_
     path_elmt       *tail;
 }                   Path;
 
-/* structure for adjacency list*/
 typedef struct  adj_list_
 {
     BfsVertex   bfs_vertex;
@@ -77,7 +64,6 @@ typedef struct  adj_list_
     List        adjacent;
 }               adj_list;
 
-/* structure for graphs */
 typedef struct  Graph_
 {
     int         vcount;
@@ -89,7 +75,6 @@ typedef struct  Graph_
     List        adjlists;
 }               Graph;
 
-/* Public interface */
 void        graph_init(Graph *graph, int (*match)(const void *key1, const void *key2), void (*destroy)(void *data));
 void        graph_destroy(Graph *graph);
 void        list_init(List *list, void (*destroy)(void *data));
